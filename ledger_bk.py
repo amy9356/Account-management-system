@@ -8,6 +8,7 @@ def create():#테이블 생성
     #account테이블 생성, account_num이 기본키
     con.commit()
     con.close()
+    
 def viewall(): #DB에 있는 모든 데이터보기
     con = sqlite3.connect("aledger.db")
     cur = con.cursor()#account테이블 안에 있는 모든 데이터 선택
@@ -16,14 +17,15 @@ def viewall(): #DB에 있는 모든 데이터보기
     con.close()
     return rows
 
-def search(name="",user="",password="",category=""):#매개변수로 들어온 값을 통해 원하는 데이터 찾기
+def search(account_num="",name="",password=""):#매개변수로 들어온 값을 통해 원하는 데이터 찾기
     con = sqlite3.connect("aledger.db")
     cur = con.cursor()
-    cur.execute("SELECT * FROM account WHERE name=? OR user=? OR password=? OR category=?",(name,user,password,category))
+    cur.execute("SELECT * FROM account WHERE account_num=? AND name=? AND password=?",(account_num,name,password))
     #모든 데이터 중에서 매개변수로 받는 것과 모두 동일한 데이터 찾기
-    rows = cur.fetchall()
+    rows = cur.fetchall()#모든 데이터 보여주기
     con.close()
     return rows
+
 def add(account_num, name, password, money):#데이터 추가
     con = sqlite3.connect("aledger.db")
     cur = con.cursor()
