@@ -1,13 +1,15 @@
 # Account-management-system
-A GUI based python program application used to manage and store your all types of account details on your system. 
-User can perform operation like 
-1. Add "Name of account", "Username/email_id", "password", "category", "Date" to database.
-2. Update
-3. Search
-4. View all
-5. Delete
-6. Cancel
-7. Clear all
+# 계좌 관리 프로그램
 
+GUI와 데이터베이스를 이용해 사용자의 계좌를 관리할 수 있는 파이썬 기반의 프로그램입니다.
+사용자는 아래와 같은 기능을 사용할 수 있습니다.
 
-![alt text](https://github.com/Martialhimanshu/Account-management-system/blob/master/front.JPG)
+1. '이름', '계좌번호', '패스워드', '금액', 'start_account(이체하는 계좌번호)', 'target_account(이체받는 계좌번호)'와 같은 정보를 이용해 계좌 데이터베이스를 관리할 수 있습니다.
+2. 계좌 개설 : '이름', '패스워드', '금액'을 입력하여 계좌 테이블에 레코드를 추가하고, 랜덤한 계좌번호를 부여받습니다. 또한 이 작업을 마치면 계좌를 개설한 시간을 표시합니다.
+3. 계좌 폐기 : 검색해서 나온 계좌들을 클릭하여 골라 데이터베이스에서 삭제할 수 있습니다.
+4. 계좌 검색 : '이름'을 입력하여 동일한 이름으로 등록된 계좌들의 레코드를 표시합니다.
+5. 입금 : '이름', '계좌번호', '패스워드', '금액'을 입력받아 해당하는 이름으로 등록된 계좌번호의 패스워드를 맞게 입력했을 경우 해당 계좌의 잔고에 '금액'만큼을 입금합니다. 
+6. 출금 : '이름', '계좌번호', '패스워드', '금액'을 입력받아 해당하는 이름으로 등록된 계좌번호의 패스워드를 맞게 입력했을 경우 해당 계좌의 잔고에서 '금액'만큼을 출금합니다. 
+7. 계좌이체 : '금액', 'start_account', 'target_account'를 입력받아 해당 '금액'만큼을 start_account에 해당하는 계좌에서 target_account에 해당하는 계좌로 이체합니다.
+8. 초기화 : 모든 엔트리와 리스트박스에 담겨져 있는 내용을 삭제합니다.
+9. 나가기 : 프로그램을 종료합니다.
