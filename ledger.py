@@ -2,12 +2,14 @@
 # Copyright 2017 by Martial Himanshu.  All rights reserved.
 # Distributed under the MPL license.  See LICENSE.txt for details.
 
-from tkinter import *
-import ledger_bk
+import tkinter.messagebox as msgbox # 메세지박스를 msgbox라는 이름으로 가져옴
+from tkinter import * #tkinter밑에있는 모든 정보 가져옴
+import ledger_bk #ledger_bk 정보 가져옴
 import datetime # datetime 정보 가져옴
 import random # random 정보 가져옴
 window = Tk()
-window.title("Account Ledger")
+window.title("계좌 관리 프로그램") #윈도우 창 타이틀
+
 
 def rand_accnum() : # 랜덤한 계좌번호를 문자열로 생성해서 리턴 하는 함수
     accnum_list = []
@@ -22,13 +24,14 @@ def rand_accnum() : # 랜덤한 계좌번호를 문자열로 생성해서 리턴
         acc_num += str(accnum_list[j])#acc_num에 str로 하나씩 저장
     return acc_num
 
-def view_command():
-    lb.delete(0,END)
-    for row in ledger_bk.viewall():
-        lb.insert(END,row)
+def view_command():# 이름을 입력해 해당 이름으로 등록된 계좌들을 검색하는 함수
+    lb.delete(0,END) #0항목부터 END까지 삭제
+    for row in ledger_bk.viewall():#ledger_bk파일에 있는 viewall()함수 이용
+         if name.get() in row : # 입력한 이름으로 등록된 계좌 찾기
+            lb.insert(END,row) #lb(리스트박스) 끝에서부터 하나씩 DB에 있는 정보 하나씩 기입
 
 # def search_command():
-#     lb.delete(0,END)
+#     lb.delete(0,END)      
 #     for row in ledger_bk.search(name=name.get(),user=user.get(),password=password.get(),category=category.get()):
 #         lb.insert(END,row)
 
@@ -50,16 +53,19 @@ def get_selected_row(event):
         global selected_tuple
         index=lb.curselection()[0]
         selected_tuple = lb.get(index)
-        e1.delete(0,END)
+        e1.delete(0,END)#성명
         e1.insert(END,selected_tuple[1])
-        # e2.delete(0,END)
-        # e2.insert(END,selected_tuple[2])
-        e3.delete(0,END)
+        e2.delete(0,END) #계좌번호
+        e2.insert(END,selected_tuple[2])
+        e3.delete(0,END)#비밀번호
         e3.insert(END,selected_tuple[3])
-        e4.delete(0,END)
+        e4.delete(0,END) #금액
         e4.insert(END,selected_tuple[4])
-        # e5.delete(0,END)
-        # e5.insert(END,selected_tuple[5])
+        e5.delete(0,END) #start_account 
+        e5.insert(END,selected_tuple[5])
+        e6.delete(0,END)#target_account
+        e6.insert(END,selected_tuple[5])
+        
     except IndexError:
         pass
 
@@ -84,36 +90,54 @@ def withdraw_command():#출금
         msgbox.showerror("에러", "금액이 부족하여 출금할 수 없습니다.")#에러 발생
     #view_command()
 
-def delete_command():
+def remittance_command():#계좌이체
+    for aa in ledger_bk.viewall(): #ledger_bk파일에 있는 viewall()함수 이용
+        if start_account.get() in aa : # 입력한 이름으로 등록된 계좌 찾기
+            star = aa
+
+    for bb in ledger_bk.viewall(): #ledger_bk파일에 있는 viewall()함수 이용
+        if target_account.get() in bb : # 입력한 이름으로 등록된 계좌 찾기
+            targe = bb
+    
+    start_acc = star[3] - int(money.get())
+    ledger_bk.update2(start_account.get(), start_acc)#차감된 금액 업데이트
+    target_acc = targe[3] + int(money.get())
+    ledger_bk.update2(target_account.get(), target_acc)#추가된 금액 업데이트
+    lb.delete(0,END)
+    lb.insert(END,"계좌이체가 완료되었습니다.")
+
+def delete_command(): #데이터 삭제
     ledger_bk.delete(selected_tuple[0])
     view_command()
     #lb.delete(END,get_selected_row.selected_tuple)
 def clear_command():
-    lb.delete(0,END)
+    lb.delete(0,END) #0항목부터 END까지 삭제
     e1.delete(0,END)
-    # e2.delete(0,END)
+    e2.delete(0,END)
     e3.delete(0,END)
     e4.delete(0,END)
-    # e5.delete(0,END)
+    e5.delete(0,END)
 
+#Label
 l1 = Label(window,text="성명")
 l1.grid(row=0,column=0,columnspan=2)
-# l2 = Label(window,text="Username/Email")
-# l2.grid(row=1,column=0,columnspan=2)
+l2 = Label(window,text="Username/Email")
+l2.grid(row=1,column=0,columnspan=2)
 l3 = Label(window,text="비밀번호")
 l3.grid(row=2,column=0,columnspan=2)
 l4 = Label(window,text="금액")
 l4.grid(row=3,column=0,columnspan=2)
-# l5 = Label(window,text="Date")
-# l5.grid(row=4,column=0,columnspan=2)
+l5 = Label(window,text="Date")
+l5.grid(row=4,column=0,columnspan=2)
 
+#Entry
 name=StringVar()
 e1 = Entry(window,textvariable=name,width=50)
 e1.grid(row=0,column=0,columnspan=10)
 
-# user=StringVar()
-# e2 = Entry(window,textvariable=user,width=50)
-# e2.grid(row=1,column=0,columnspan=10)
+user=StringVar()
+e2 = Entry(window,textvariable=user,width=50)
+e2.grid(row=1,column=0,columnspan=10)
 
 password=StringVar()
 e3 = Entry(window,textvariable=password,width=50)
@@ -123,18 +147,27 @@ money=StringVar()
 e4 = Entry(window,textvariable=money,width=50)
 e4.grid(row=3,column=0,columnspan=10)
 
+start_account=StringVar()
+e5 = Entry(window,textvariable=start_account,width=50)
+e5.grid(row=4,column=0,columnspan=10)
+
+target_account=StringVar()
+e6 = Entry(window, textvariable=target_account, width=50)
+e6.grid(row=5, column=0, columnspan=10)
+
 # cdate=StringVar()
 # e5 = Entry(window,textvariable=cdate,width=50)
 # e5.grid(row=4,column=0,columnspan=10)
 
+#Button
 b1 = Button(window,text="계좌생성",width=12,command=add_command)
 b1.grid(row=5,column=0)
 
-# b2 = Button(window,text="Update",width=12,command=update_command)
-# b2.grid(row=5,column=1)
+b2 = Button(window,text="Update",width=12,command=update_command)
+b2.grid(row=5,column=1)
 
-# b3 = Button(window,text="Search",width=12,command=search_command)
-# b3.grid(row=5,column=2)
+b3 = Button(window,text="Search",width=12,command=search_command)
+b3.grid(row=5,column=2)
 
 b4 = Button(window,text="View All",width=12,command=view_command)
 b4.grid(row=5,column=3)
@@ -142,15 +175,20 @@ b4.grid(row=5,column=3)
 b5 = Button(window,text="Delete",width=12,command=delete_command)
 b5.grid(row=5,column=4)
 
-b6 = Button(window,text="나가기",width=12,command=window.destroy)
-b6.grid(row=5,column=5)
+b6 = Button(window,text="계좌이체",width=12, command=remittance_command)
+b6.grid(row=6,column=5)
 
 b7 = Button(window,text="초기화",width=12,command=clear_command)
 b7.grid(row=0,column=5)
 
+b8 = Button(window,text="나가기",width=12,command=window.destroy)
+b8.grid(row=6,column=6)
+
+#Listbox
 lb=Listbox(window,height=20,width=94)
 lb.grid(row=6,column=0,columnspan=6)
 
+#Scrollbar
 sb=Scrollbar(window)
 sb.grid(row=6,column=6,rowspan=6)
 
@@ -158,4 +196,4 @@ lb.configure(yscrollcommand=sb.set)
 sb.configure(command=lb.yview)
 
 lb.bind('<<ListboxSelect>>',get_selected_row)
-window.mainloop()
+window.mainloop() #윈도우 창 종료
