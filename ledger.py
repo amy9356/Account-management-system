@@ -4,23 +4,8 @@
 
 from tkinter import *
 import ledger_bk
-import datetime # datetime 정보 가져옴
-import random # random 정보 가져옴
 window = Tk()
 window.title("Account Ledger")
-
-def rand_accnum() : # 랜덤한 계좌번호를 문자열로 생성해서 리턴 하는 함수
-    accnum_list = []
-    acc_num = ""
-
-    for i in range(16) :
-        accnum_list.append(random.randint(0, 9))#0부터 9사이로 된 숫자가 랜덤으로 입력 
-    accnum_list[6] = '-'#7번째 자리에 '-'입력
-    accnum_list[9] = '-'#10번째 자리에 '-'입력
-
-    for j in range(16):
-        acc_num += str(accnum_list[j])#acc_num에 str로 하나씩 저장
-    return acc_num
 
 def view_command():
     lb.delete(0,END)
@@ -33,17 +18,9 @@ def search_command():
         lb.insert(END,row)
 
 def add_command():
-    # 정보 입력 시 빈칸이 있으면 에러 발생하고 저장 x
-    if name.get() == "" or password.get() == "" or money.get() == "" :
-        msgbox.showerror("에러", "정보 칸을 모두 입력해주세요!")#에러 발생
-        return -1
-
-    acc_number = rand_accnum()
-    ledger_bk.add(acc_number, name.get(), password.get(), money.get())#ledger_bk파일에 있는 add()함수 이용
-    lb.delete(0,END) #0항목부터 END까지 삭제
-    lb.insert(END,"이름 : " + name.get(),"계좌번호 : " + acc_number, "패스워드 : " + "*" * len(password.get()),"계좌잔고 : " + money.get(), "계좌 개설 시간 : " + datetime.datetime.now().strftime('%Y년 %m월 %d일 %H시 %M분 %S초'))
-    #lb에 ledger_bk파일에 있는 add()함수에서 받아온 정보와 계좌번호, 그리고 계좌를 생성한 시간을 화면에 출력
-
+    ledger_bk.add(name.get(),user.get(),password.get(),category.get(),cdate.get())
+    lb.delete(0,END)
+    lb.insert(END,name.get(),user.get(),password.get(),category.get(),cdate.get())
 
 def get_selected_row(event):
     try:

@@ -1,11 +1,10 @@
 #please
 #PLEASE
 import sqlite3
-def create():#테이블 생성
+def create():
     con = sqlite3.connect("aledger.db")
     cur = con.cursor()
-    cur.execute("CREATE TABLE IF NOT EXISTS account(account_num TEXT PRIMARY KEY, name TEXT, password TEXT, money INTEGER)")
-    #account테이블 생성, account_num이 기본키
+    cur.execute("CREATE TABLE IF NOT EXISTS account(id INTEGER PRIMARY KEY,name TEXT,user TEXT, password TEXT,category TEXT,cdate TEXT)")
     con.commit()
     con.close()
 def viewall():
@@ -23,14 +22,12 @@ def search(name="",user="",password="",category=""):
     rows = cur.fetchall()
     con.close()
     return rows
-def add(account_num, name, password, money):#데이터 추가
+def add(name,user,password,category,cdate):
     con = sqlite3.connect("aledger.db")
     cur = con.cursor()
-    cur.execute("INSERT INTO account VALUES(?,?,?,?)",(account_num, name, password, money))
-    #매개변수로 들어온 값을 DB에 저장
+    cur.execute("INSERT INTO account VALUES(NULL,?,?,?,?,?)",(name,user,password,category,cdate))
     con.commit()
     con.close()
-
 def update(id,name,user,password,category,cdate):
     con = sqlite3.connect("aledger.db")
     cur = con.cursor()
