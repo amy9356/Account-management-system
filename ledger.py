@@ -63,9 +63,13 @@ def get_selected_row(event):
     except IndexError:
         pass
 
-# def update_command():
-#     ledger_bk.update(selected_tuple[0],name.get(),user.get(),password.get(),category.get(),cdate.get())
-#     view_command()
+def deposit_command():#입금
+    a = ledger_bk.search(account_num.get(), name.get(), password.get())#Entry에서 받아옴
+    b = int(a[0][3]) + int(money.get())#DB에 있는 계좌 잔액과 Entry에서 받아온 금액 합산
+    ledger_bk.update(name.get(),account_num.get(),b)#합산된 금액 업데이트
+    lb.delete(0,END)
+    lb.insert(END,"입금이 완료되었습니다.")
+    #view_command()
 
 def delete_command():
     ledger_bk.delete(selected_tuple[0])

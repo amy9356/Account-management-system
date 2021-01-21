@@ -30,12 +30,15 @@ def add(account_num, name, password, money):#데이터 추가
     #매개변수로 들어온 값을 DB에 저장
     con.commit()
     con.close()
-# def update(id,name,user,password,category,cdate):
-#     con = sqlite3.connect("aledger.db")
-#     cur = con.cursor()
-#     cur.execute("UPDATE account SET name=?,user=?,password=?,category=?,cdate=? WHERE id=?",(name,user,password,category,cdate,id))
-#     con.commit()
-#     con.close()
+
+def update(name,account_num, money):#입금, 출금시 데이터 업데이트
+    con = sqlite3.connect("aledger.db")
+    cur = con.cursor()
+    cur.execute("UPDATE account SET money = '%d' WHERE name = '%s' AND account_num = '%s'" % (money, name, account_num))
+    #매개변수로 들어온 값을 새롭게 DB에 저장
+    con.commit()
+    con.close()
+
 def delete(account_num):#데이터 삭제
     con = sqlite3.connect("aledger.db")
     cur = con.cursor()
